@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Подсчет дней между датами</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Подсчитай разницу между датами</h1>
+
+      <div class="date-picker">
+        <label for="startDate">Дата начала:</label>
+        <input type="datetime-local" id="startDate" />
+      </div>
+
+      <div class="date-picker">
+        <label for="endDate">Дата окончания:</label>
+        <input type="datetime-local" id="endDate" />
+      </div>
+
+      <button onclick="calculateDifference()">Посчитать разницу</button>
+
+      <div id="result">
+        <p>Осталось дней: <span id="daysLeft">0</span></p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
