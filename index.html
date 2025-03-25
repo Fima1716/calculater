@@ -3,30 +3,119 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Подсчет дней между датами</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Подсчёт разницы между датами</title>
+    <style>
+      body {
+        background-color: #121212;
+        color: #00ff00;
+        font-family: "Courier New", Courier, monospace;
+        padding: 20px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h2 {
+        font-size: 1.4em;
+        margin-bottom: 20px;
+        text-shadow: 0 0 3px #00ff00;
+      }
+      p {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+      }
+      textarea {
+        background-color: #1e1e1e;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        font-size: 1.1em;
+        width: 80%;
+        height: 150px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        resize: none;
+      }
+      button {
+        background-color: #333333;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        font-size: 1.1em;
+        width: 80%;
+        padding: 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover {
+        background-color: #444444;
+        border-color: #00aa00;
+      }
+      .output {
+        margin-top: 20px;
+        font-size: 1.2em;
+        color: #ff6347;
+        font-weight: bold;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      .footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        font-size: 0.8em;
+        color: #00ff00;
+        border-top: 1px solid #00ff00;
+        background-color: #121212;
+      }
+    </style>
   </head>
   <body>
-    <div class="container">
-      <h1>Подсчитай разницу между датами</h1>
+    <h2>Сколько у меня дней подписки?</h2>
+    <textarea
+      id="inputText"
+      placeholder="Вставьте скопированное сообщение от бота сюда и нажмите на кнопку ниже..."
+    ></textarea>
+    <button onclick="calculateDays()">Посчитать остаток дней</button>
 
-      <div class="date-picker">
-        <label for="startDate">Дата начала:</label>
-        <input type="datetime-local" id="startDate" />
-      </div>
+    <div class="output" id="output"></div>
 
-      <div class="date-picker">
-        <label for="endDate">Дата окончания:</label>
-        <input type="datetime-local" id="endDate" />
-      </div>
+    <script>
+      function calculateDays() {
+        const inputText = document.getElementById("inputText").value;
 
-      <button onclick="calculateDifference()">Посчитать разницу</button>
+        // Регулярные выражения для извлечения дат
+        const dateRegex = /(\d{2}):(\d{2}) (\d{2})\.(\d{2})\.(\d{4})/g;
+        const dates = [];
+        let match;
 
-      <div id="result">
-        <p>Осталось дней: <span id="daysLeft">0</span></p>
-      </div>
-    </div>
+        // Извлечение всех дат
+        while ((match = dateRegex.exec(inputText)) !== null) {
+          const [fullMatch, hour, minute, day, month, year] = match;
+          const date = new Date(
+            `${year}-${month}-${day}T${hour}:${minute}:00+03:00`
+          ); // Преобразуем в Date
+          dates.push(date);
+        }
 
-    <script src="script.js"></script>
+        if (dates.length === 2) {
+          const [startDate, endDate] = dates;
+
+          // Разница между датами
+          const diffTime = endDate - startDate;
+          const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24)); // Переводим миллисекунды в дни
+
+          // Отображаем результат
+          document.getElementById(
+            "output"
+          ).textContent = `Разница между датами: ${diffDays} дней.`;
+        } else {
+          document.getElementById("output").textContent =
+            "Пожалуйста, убедитесь, что в сообщении есть две даты в нужном формате.";
+        }
+      }
+    </script>
   </body>
 </html>
